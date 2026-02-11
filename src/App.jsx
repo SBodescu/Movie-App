@@ -8,6 +8,8 @@ import FilterButtons from "./components/FilterButtons/FilterButtons";
 
 function App() {
   const [searchText, setSearchText] = useState('');
+  const [filterGenre, setFilterGenre] = useState('all');
+  const [filterRating, setFilterRating] = useState('all');
   return (
     <div className="app-container">
       <PageButtons/>
@@ -15,9 +17,16 @@ function App() {
         searchText = {searchText}
         onSearchTextChange = {setSearchText}
       />
-      <FilterButtons/>
+      <FilterButtons
+        filterGenre = {filterGenre}
+        onFilterGenre = {setFilterGenre}
+        filterRating = {filterGenre}
+        onFilterRating = {setFilterRating}
+      />
       <MovieCardList
         searchText = {searchText}
+        filterGenre = {filterGenre}
+        filterRating = {filterRating}
       />
     </div>
   );
