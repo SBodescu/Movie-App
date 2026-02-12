@@ -1,10 +1,29 @@
 import "./MovieCardList.css";
 //import dataFile from "../../movies.json";
 import MovieCard from "../MovieCard/MovieCard";
-import { getWatchlist } from '../../utils/localstorage';
+import { getWatchlist, addToWatchlist, removeFromWatchlist, isInWatchlist } from '../../utils/localstorage';
 import filterAndSortMovies from '../../utils/filters';
+import { useState, useEffect } from "react";
 
 export default function MovieCardList({data =[], filters = {}, view = 'all' }){
+    const [watchlist, setWatchlist] = useState([]);
+
+    useEffect(() => {
+        setWatchlist(getWatchlist());
+    }, []);
+
+    const handleToggleWatchlist = (movie) => {
+        const isInList = watchlist.some(m => m.id === movie.id);
+        
+        if (isInList) {
+            removeFromWatchlist(movie.id);
+            setWatchlist(prev => prev.filter(m => m.id !== movie.id));
+        } else {
+            addToWatchlist(movie);
+            setWatchlist(prev => [...prev, movie]);
+        }
+    };
+
     const { searchText = '', genre = 'all', rating = 'all', sort = 'all' } = filters;
     const getImageUrl = (name) => {
         return new URL(`../../assets/images/${name}`, import.meta.url).href;
@@ -51,6 +70,8 @@ export default function MovieCardList({data =[], filters = {}, view = 'all' }){
                     title = {item.title}
                     genre = {item.genre}
                     rating = {item.rating}
+                    isInWatchlist={isInWatchlist(item.id)}
+                    onToggleWatchlist={() => handleToggleWatchlist(item)}
                 />
             )}
         </div>
