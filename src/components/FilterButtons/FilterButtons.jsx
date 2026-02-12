@@ -1,8 +1,16 @@
 import "./FilterButtons.css"
 
-export default function FilterButtons({filterGenre, onFilterGenre, filterRating, onFilterRating}){
+export default function FilterButtons({filterGenre, onFilterGenre, filterRating, onFilterRating, filterSort, onFilterSort}){
     return(
         <div className="filters-container">
+            <div className="pill-button">
+                <h3>Sort</h3>
+                <select id="sorting" value={filterSort} onChange={(e)=>onFilterSort(e.target.value)}>
+                    <option value="all">All</option>
+                    <option value="ascending">A-Z</option>
+                    <option value="descending">Z-A</option>
+                </select>
+            </div>
             <div className="pill-button">
                 <h3>Genre</h3>
                 <select id="genre" value={filterGenre} onChange={(e)=>onFilterGenre(e.target.value)}>
@@ -22,6 +30,7 @@ export default function FilterButtons({filterGenre, onFilterGenre, filterRating,
                     <option value="gt8">greater than 8</option>
                 </select>
             </div>
+            
         </div>
     );
 }
