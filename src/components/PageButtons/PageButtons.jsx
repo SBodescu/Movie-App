@@ -1,26 +1,18 @@
-import "./PageButtons.css"
+import { NavLink } from "react-router-dom";
+import "./PageButtons.css";
 
-export default function PageButtons({ onChangeView, view = 'all' }){
-    return(
+export default function PageButtons() {
+    return (
         <div className="nav-container">
-            <div>
-                <h1>SomeFlix</h1>
-            </div>
+            <h1>SomeFlix</h1>
             <div className="page-buttons-container">
-                <button
-                    className={`nav-btn ${view === 'all' ? 'active' : ''}`}
-                    onClick={() => onChangeView && onChangeView('all')}
-                >
+                <NavLink to="/movies" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
                     Home
-                </button>
-                <button
-                    className={`nav-btn ${view === 'watchlist' ? 'active' : ''}`}
-                    onClick={() => onChangeView && onChangeView('watchlist')}
-                >
+                </NavLink>
+                <NavLink to="/watchlist" className={({ isActive }) => `nav-btn ${isActive ? 'active' : ''}`}>
                     Watchlist
-                </button>
+                </NavLink>
             </div>
         </div>
-        
     );
 }

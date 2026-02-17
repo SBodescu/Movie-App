@@ -28,12 +28,17 @@
 
 .card-btn {
   margin-top: auto; 
-  background-color: #007bff;
+  background-color: #393939;
   color: white;
   border: none;
   padding: 10px;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.card-btn.in-watchlist {
+  background-color: #f6d621;
+  color: #111;
 }
 
 .genre-rating {
@@ -56,6 +61,25 @@
     padding: 4px 8px;       
     min-width: 35px;        
    
+}
+.rating.rating-high {
+  color: #2ecc71;
+  background-color: transparent;
+}
+
+.rating.rating-medium {
+  color: #f6d621;
+  background-color: transparent;
+}
+
+.rating.rating-low {
+  color: #e74c3c;
+  background-color: transparent;
+}
+
+.card-body a {
+  text-decoration: none;
+  color: inherit;
 }
 
 h2{
