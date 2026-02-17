@@ -1,27 +1,36 @@
+import { Link } from 'react-router-dom';
 import "./MovieCard.css";
 
-export default function MovieCard({isInWatchlist, onToggleWatchlist, ...props }){
-
-    const ratingColor = parseFloat(props.rating) >= 8 ? '#2ecc71' : '#f6d621';
-    return(
-        <div className="card">
-            <img src={props.image} alt={props.title} className="card-img" />
-            <div className="card-body">
-                <h2>{props.title}</h2>
-                <div className="genre-rating">
-                    <span className="genre">{props.genre}</span>
-                    <span className="rating" style = {{color:ratingColor}}>{props.rating}</span>
-                </div>
-                <button 
-                    className="card-btn" 
-                    onClick={onToggleWatchlist}
-                    style={{
-                        backgroundColor: isInWatchlist ? '#f6d621' : '#393939'
-                    }}
-                >
-                    {isInWatchlist ? 'Added to watchlist' : 'Add to watchlist'}
-                </button>
-            </div>
+export default function MovieCard({ id, title, image, genre, rating, isInWatchlist, onToggleWatchlist }) {
+  const btnClass = isInWatchlist ? 'card-btn in-watchlist' : 'card-btn';
+  const ratingClassName = getRatingClass(rating);
+  return (
+    <div className="card">
+      <Link to={`/movies/${id}`}>
+        <img src={image} alt={title} className="card-img" />
+      </Link>
+      <div className="card-body">
+        <Link to={`/movies/${id}`}>
+          <h2>{title}</h2>
+        </Link>
+        <div className="genre-rating">
+          <span className="genre">{genre}</span>
+          <span className={`rating ${ratingClassName}`}>{rating}</span>
         </div>
-    );
+        <button 
+          className={btnClass}
+          onClick={onToggleWatchlist}
+        >
+          {isInWatchlist ? 'Added to watchlist' : 'Add to watchlist'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function getRatingClass(rating) {
+  const numRating = parseFloat(rating);
+  if (numRating >= 8) return 'rating-high';
+  if (numRating >= 5) return 'rating-medium';
+  return 'rating-low';
 }
