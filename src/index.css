@@ -4,6 +4,19 @@
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+button {
+  text-decoration: none;
+}
+
 html {
   font-family: "Quicksand", sans-serif;
   line-height: 1.5;
