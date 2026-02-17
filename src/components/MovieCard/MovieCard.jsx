@@ -3,6 +3,8 @@ import "./MovieCard.css";
 
 export default function MovieCard({ id, title, image, genre, rating, isInWatchlist, onToggleWatchlist }) {
   const btnClass = isInWatchlist ? 'card-btn in-watchlist' : 'card-btn';
+  const addedMessage = 'Added to watchlist';
+  const notAddedMessage = 'Add to watchlist';
   const ratingClassName = getRatingClass(rating);
   return (
     <div className="card">
@@ -21,7 +23,7 @@ export default function MovieCard({ id, title, image, genre, rating, isInWatchli
           className={btnClass}
           onClick={onToggleWatchlist}
         >
-          {isInWatchlist ? 'Added to watchlist' : 'Add to watchlist'}
+          {isInWatchlist ? addedMessage : notAddedMessage}
         </button>
       </div>
     </div>

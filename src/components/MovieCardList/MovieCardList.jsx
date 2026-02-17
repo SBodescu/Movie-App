@@ -1,5 +1,5 @@
-import { useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useState, useCallback } from 'react';
 import "./MovieCardList.css";
 import MovieCard from '../MovieCard/MovieCard';
 import SearchBar from '../SearchBar/SearchBar';
@@ -10,6 +10,7 @@ import { getWatchlist, addToWatchlist, removeFromWatchlist } from '../../utils/l
 export default function MovieCardList({ data, view }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [watchlist, setWatchlist] = useState(getWatchlist());
+  const navigate = useNavigate();
 
   const filters = {
     searchText: searchParams.get("search") || "",
@@ -18,7 +19,10 @@ export default function MovieCardList({ data, view }) {
     sort: searchParams.get("order") || "all"
   };
 
-  const updateFilter = (key, value) => {
+  const watchIds = view === 'watchlist' ? watchlist.map(m => m.id) : null;
+  const filteredMovies = filterAndSortMovies(data, { ...filters, view, watchIds });
+
+  const updateFilter = useCallback((key, value) => {
     const newParams = new URLSearchParams(searchParams);
     if (value === "all" || value === "") {
       newParams.delete(key);
@@ -26,9 +30,9 @@ export default function MovieCardList({ data, view }) {
       newParams.set(key, value);
     }
     setSearchParams(newParams);
-  };
+  }, [searchParams, setSearchParams]);
 
-  const handleToggleWatchlist = (movie) => {
+  const handleToggleWatchlist = useCallback((movie) => {
     const isInList = watchlist.some(m => m.id === movie.id);
     if (isInList) {
       removeFromWatchlist(movie.id);
@@ -37,10 +41,14 @@ export default function MovieCardList({ data, view }) {
       addToWatchlist(movie);
       setWatchlist(prev => [...prev, movie]);
     }
-  };
+  }, [watchlist]);
 
-  const watchIds = view === 'watchlist' ? watchlist.map(m => m.id) : null;
-  const filteredMovies = filterAndSortMovies(data, { ...filters, view, watchIds });
+    if (!data || data.length === 0) {
+        return <div className="card-list-container">Loading movies...</div>;
+    }
+    if (filteredMovies.length === 0) {
+      return errorHandler(filteredMovies, view, filters.searchText, filters.genre, filters.rating, navigate);
+    }
 
   return (
     <>
@@ -72,4 +80,25 @@ export default function MovieCardList({ data, view }) {
       </div>
     </>
   );
+}
+
+function errorHandler(filteredMovies, view, searchText, genre, rating, navigate) {
+    let errorMessage = "No movies found";
+    if (filteredMovies.length === 0) {
+        if (view === 'watchlist') {
+            errorMessage = "Your watchlist is empty. Add some movies to get started!";
+        } else if (searchText.trim() !== "") {
+            errorMessage = `No movies found matching "${searchText}"`;
+        } else if (genre !== "all" || rating !== "all") {
+            errorMessage = "No movies match your filters. Try adjusting your search criteria.";
+        }
+    }
+
+    return (
+        <div className="card-list-error-container">
+            <button className="back-btn" onClick={() => navigate('/movies')}>← Back</button>
+            <div className="no-results-message">{errorMessage}</div>
+        </div>
+    );
+    
 }

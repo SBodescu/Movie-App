@@ -7,3 +7,19 @@
     max-width: 1400px; 
     margin: 0 auto;
 }
+
+.no-results-message {
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    margin-top: 40px;
+}
+
+.card-list-error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px; 
+    width: 100%;
+}
