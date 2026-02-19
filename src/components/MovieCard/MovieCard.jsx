@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleWatchlist } from '../../store/movieSlice';
 import "./MovieCard.css";
 
-export default function MovieCard({ id, title, image, genre, rating, isInWatchlist, onToggleWatchlist }) {
+export default function MovieCard({ id, title, image, genre, rating, ...rest }) {
+  const dispatch = useDispatch();
+  const watchlist = useSelector((state) => state.movies.watchlist);
+  const isInWatchlist = watchlist.includes(id);
   const btnClass = isInWatchlist ? 'card-btn in-watchlist' : 'card-btn';
   const addedMessage = 'Added to watchlist';
   const notAddedMessage = 'Add to watchlist';
   const ratingClassName = getRatingClass(rating);
+  const movie = { id, title, image, genre, rating, ...rest };
+  
   return (
     <div className="card">
       <Link to={`/movies/${id}`}>
@@ -21,7 +28,7 @@ export default function MovieCard({ id, title, image, genre, rating, isInWatchli
         </div>
         <button 
           className={btnClass}
-          onClick={onToggleWatchlist}
+          onClick={() => dispatch(toggleWatchlist(movie))}
         >
           {isInWatchlist ? addedMessage : notAddedMessage}
         </button>
