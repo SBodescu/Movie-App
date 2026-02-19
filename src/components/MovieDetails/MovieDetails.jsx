@@ -1,16 +1,19 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {getRatingClass} from '../MovieCard/MovieCard';
 import "./MovieDetails.css";
 
-export default function MovieDetails({ data }) {
+export default function MovieDetails() {
   const { id } = useParams(); 
   const navigate = useNavigate();
+  const movies = useSelector((state) => state.movies.movies);
 
-  const movie = data.find(m => m.id === parseInt(id));
+  const movie = movies.find(m => m.id === parseInt(id));
   const ratingClass = getRatingClass(movie.rating);
 
+  
   if (!movie) return <div className="error">Movie not found!</div>;
-
+  
   return (
     <div className="movie-details-container">
       <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
